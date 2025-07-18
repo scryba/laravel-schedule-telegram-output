@@ -1,0 +1,54 @@
+{
+  "name": "scryba/laravel-schedule-telegram-output",
+  "description": "Laravel package to send scheduled command outputs through Telegram bots",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "telegram",
+    "schedule",
+    "scheduler",
+    "output",
+    "command",
+    "notifications",
+    "cron",
+    "sendOutputTo",
+    "console"
+  ],
+  "authors": [
+    {
+      "name": "Michael K. Laweh",
+      "email": "contact@michael.laweitech.com",
+      "homepage": "https://michael.laweitech.com/",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/scryba/laravel-schedule-telegram-output",
+  "support": {
+    "issues": "https://github.com/scryba/laravel-schedule-telegram-output/issues",
+    "source": "https://github.com/scryba/laravel-schedule-telegram-output"
+  },
+  "autoload": {
+    "psr-4": {
+      "Scryba\\LaravelScheduleTelegramOutput\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^10.0|^11.0|^12.0",
+    "illuminate/console": "^10.0|^11.0|^12.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0|^9.0|^10.0",
+    "phpunit/phpunit": "^10.0|^11.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Scryba\\LaravelScheduleTelegramOutput\\ScheduleTelegramOutputServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
