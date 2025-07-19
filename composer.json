@@ -23,11 +23,18 @@
       "role": "Developer"
     }
   ],
-  "homepage": "https://github.com/scryba/laravel-schedule-telegram-output",
+  "homepage": "https://michael.laweitech.com/projects/laravel-schedule-telegram-output",
+  "readme": "README.md",
   "support": {
     "issues": "https://github.com/scryba/laravel-schedule-telegram-output/issues",
     "source": "https://github.com/scryba/laravel-schedule-telegram-output"
   },
+  "funding": [
+    {
+      "type": "custom",
+      "url": "https://michael.laweitech.com/buy-me-a-coffee"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Scryba\\LaravelScheduleTelegramOutput\\": "src/"
