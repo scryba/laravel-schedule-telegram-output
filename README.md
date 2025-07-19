@@ -15,7 +15,7 @@ A Laravel package to send scheduled job outputs to Telegram with robust formatti
 1. **Require the package via Composer:**
 
    ```bash
-   composer require scryba/laravel-schedule-telegram-output:dev-main
+   composer require scryba/laravel-schedule-telegram-output
    ```
 
 2. **Publish the config (optional, for customization):**
@@ -42,7 +42,7 @@ You can install it directly from GitHub as a VCS repository:
 2. Require the package:
 
    ```bash
-   composer require scryba/laravel-schedule-telegram-output:dev-main
+   composer require scryba/laravel-schedule-telegram-output
    ```
 
 3. **Manually register the service provider** in your `config/app.php` (since auto-discovery does not work for VCS installs):
