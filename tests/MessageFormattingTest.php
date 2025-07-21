@@ -30,4 +30,18 @@ class MessageFormattingTest extends TestCase
         $this->assertStringContainsString('<pre>', $contents);
         $this->assertStringContainsString('debug mode', $contents);
     }
+
+    /** @test */
+    public function it_escapes_dots_and_special_characters_in_markdownv2()
+    {
+        $output = "Visit example.com and see file my.file.txt!";
+        $escaped = TelegramNotifier::escapeMarkdownV2($output);
+        // Dots and exclamation marks must be escaped
+        $this->assertStringContainsString('example\.com', $escaped);
+        $this->assertStringContainsString('my\.file\.txt', $escaped);
+        $this->assertStringContainsString('\!', $escaped);
+        // No double escaping
+        $this->assertStringNotContainsString('\\\.', $escaped);
+        $this->assertStringNotContainsString('\\!', $escaped);
+    }
 } 
