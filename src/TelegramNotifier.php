@@ -13,12 +13,10 @@ class TelegramNotifier
     public static function escapeMarkdownV2($text)
     {
         // List of special characters for Telegram MarkdownV2
-        $special = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
-        // Escape only if not already escaped
-        foreach ($special as $char) {
-            $text = preg_replace('/(?<!\\)'.preg_quote($char, '/').'/', '\\'.$char, $text);
-        }
-        return $text;
+        $specials = '_*[]()~`>#+-=|{}.!';
+        return preg_replace_callback('/([' . preg_quote($specials, '/') . '])/', function ($m) {
+            return '\\' . $m[1];
+        }, $text);
     }
 
     /**
