@@ -89,6 +89,14 @@ class TelegramNotifier
                 'parse_mode' => $parseMode,
             ]
         ]);
+        // Log the raw HTTP body as it will be sent
+        \Log::debug('[ScheduleTelegramOutput] HTTP raw body', [
+            'body' => http_build_query([
+                'chat_id' => $chatId,
+                'text' => $contents,
+                'parse_mode' => $parseMode,
+            ])
+        ]);
         if ($shouldDebug) {
             \Log::info('[ScheduleTelegramOutput] Telegram message content', [
                 'message' => $contents,
@@ -101,7 +109,7 @@ class TelegramNotifier
             'text' => $contents,
             'parse_mode' => $parseMode,
         ];
-        $response = Http::get($apiUrl, $params);
+        $response = Http::asForm()->post($apiUrl, $params);
         if (!$response->successful()) {
             \Log::error('[ScheduleTelegramOutput] Failed to send Telegram message', [
                 'chat_id' => $chatId,
