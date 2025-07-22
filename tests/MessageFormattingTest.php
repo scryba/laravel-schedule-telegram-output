@@ -62,4 +62,14 @@ class MessageFormattingTest extends TestCase
         $this->assertStringNotContainsString('\\\.', $message);
         $this->assertStringNotContainsString('\\\-', $message);
     }
+
+    /** @test */
+    public function it_escapes_minimal_dot_message()
+    {
+        $output = "test.example.com";
+        $escaped = TelegramNotifier::escapeMarkdownV2($output);
+        $this->assertSame('test\.example\.com', $escaped);
+        // No double escaping
+        $this->assertStringNotContainsString('\\\.', $escaped);
+    }
 } 

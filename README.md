@@ -1,5 +1,11 @@
 # Laravel Schedule Telegram Output
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/scryba/laravel-schedule-telegram-output.svg?style=flat-square)](https://packagist.org/packages/scryba/laravel-schedule-telegram-output)
+[![Total Downloads](https://img.shields.io/packagist/dt/scryba/laravel-schedule-telegram-output.svg?style=flat-square)](https://packagist.org/packages/scryba/laravel-schedule-telegram-output)
+[![License](https://img.shields.io/packagist/l/scryba/laravel-schedule-telegram-output.svg?style=flat-square)](https://packagist.org/packages/scryba/laravel-schedule-telegram-output)
+[![GitHub Stars](https://img.shields.io/github/stars/scryba/laravel-schedule-telegram-output?style=flat-square)](https://github.com/scryba/laravel-schedule-telegram-output/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/scryba/laravel-schedule-telegram-output?style=flat-square)](https://github.com/scryba/laravel-schedule-telegram-output/network)
+
 A Laravel package to send scheduled job outputs to Telegram with robust formatting and flexible configuration.
 
 ## Features
@@ -211,3 +217,12 @@ Your command output here...
 ## License
 
 MIT
+
+## Documentation & Onboarding
+
+- [Getting Started Guide](docs/GETTING_STARTED.md)
+- [How to get your Telegram Bot Token and Chat ID](docs/TELEGRAM_SETUP.md)
+- [Configuration Reference](docs/CONFIGURATION.md)
+- [Advanced Usage](docs/ADVANCED_USAGE.md)
+- [Troubleshooting & FAQ](docs/TROUBLESHOOTING.md)
+- [Examples](docs/EXAMPLES.md)

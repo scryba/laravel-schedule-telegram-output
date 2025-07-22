@@ -80,6 +80,15 @@ class TelegramNotifier
             'message' => $contents,
             'parse_mode' => $parseMode
         ]);
+        // Log the actual HTTP payload
+        \Log::debug('[ScheduleTelegramOutput] HTTP payload', [
+            'url' => "https://api.telegram.org/bot{$botToken}/sendMessage",
+            'params' => [
+                'chat_id' => $chatId,
+                'text' => $contents,
+                'parse_mode' => $parseMode,
+            ]
+        ]);
         if ($shouldDebug) {
             \Log::info('[ScheduleTelegramOutput] Telegram message content', [
                 'message' => $contents,
