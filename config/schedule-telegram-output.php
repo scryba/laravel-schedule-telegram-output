@@ -64,4 +64,6 @@ return [
         // Max number of characters to send as output snippet (default: 500)
         'snippet_max_length' => 500,
     ],
+    // Log the escaped message and HTTP payload (default: app.debug)
+    'log_payload' => env('SCHEDULE_TELEGRAM_OUTPUT_LOG_PAYLOAD', env('APP_DEBUG', false)),
 ]; 
