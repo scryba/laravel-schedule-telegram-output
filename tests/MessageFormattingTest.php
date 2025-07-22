@@ -44,4 +44,22 @@ class MessageFormattingTest extends TestCase
         $this->assertStringNotContainsString('\\\.', $escaped);
         $this->assertStringNotContainsString('\\!', $escaped);
     }
+
+    /** @test */
+    public function it_escapes_real_world_failing_case()
+    {
+        $project = 'picture-gallery-adx-redirector';
+        $env = 'production';
+        $output = "Processing file: my.file.txt\nURL: https://example.com/path.to/file\nDone.";
+        $command = 'app:process-uploaded-csv';
+        $message = TelegramNotifier::formatMessage($output, $command, 'MarkdownV2', 4000)[0];
+        // All dots must be escaped
+        $this->assertStringContainsString('picture\-gallery\-adx\-redirector', $message);
+        $this->assertStringContainsString('my\.file\.txt', $message);
+        $this->assertStringContainsString('https://example\.com/path\.to/file', $message);
+        $this->assertStringContainsString('Done\.', $message);
+        // No double escaping
+        $this->assertStringNotContainsString('\\\.', $message);
+        $this->assertStringNotContainsString('\\\-', $message);
+    }
 } 

@@ -59,5 +59,7 @@ return [
         'max_length' => 4000,
         'include_timestamp' => true,
         'include_command_name' => true,
+        // Show the app URL in Telegram messages (default: false)
+        'show_url' => false,
     ],
 ]; 
