@@ -14,7 +14,8 @@ class TelegramNotifier
     {
         // List of special characters for Telegram MarkdownV2
         $specials = '_*[]()~`>#+-=|{}.!';
-        return preg_replace_callback('/([' . preg_quote($specials, '/') . '])/', function ($m) {
+        // Only escape if not already escaped
+        return preg_replace_callback('/(?<!\\\\)([' . preg_quote($specials, '/') . '])/', function ($m) {
             return '\\' . $m[1];
         }, $text);
     }
