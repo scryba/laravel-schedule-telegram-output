@@ -27,8 +27,19 @@ class TelegramNotifier
     {
         $truncated = false;
         $showUrl = config('schedule-telegram-output.message_format.show_url', false);
+        $snippetMaxLength = config('schedule-telegram-output.message_format.snippet_max_length', 500);
+        // Only send a snippet of the output (first 10 lines or snippetMaxLength chars, whichever is shorter)
+        $lines = preg_split('/\r?\n/', $output);
+        $snippet = implode("\n", array_slice($lines, 0, 10));
+        if (strlen($snippet) > $snippetMaxLength) {
+            $snippet = substr($snippet, 0, $snippetMaxLength);
+        }
+        if (count($lines) > 10 || strlen($output) > strlen($snippet)) {
+            $snippet .= "\n...\n[Output truncated: showing only a snippet]";
+            $truncated = true;
+        }
         if (strtolower($parseMode) === 'html') {
-            $outputClean = str_replace('`', '', $output);
+            $outputClean = str_replace('`', '', $snippet);
             $outputHtml = e($outputClean);
             $outputPre = '<pre>' . $outputHtml . '</pre>';
             $contents = "<b>🤖 Scheduled Job Output</b><br><br>";
@@ -41,12 +52,8 @@ class TelegramNotifier
             $contents .= "<b>Command:</b> <code>" . e($commandName) . "</code><br>";
             $contents .= "<b>Time:</b> " . e(now()->format('Y-m-d H:i:s T')) . "<br><br>";
             $contents .= "<b>Output:</b><br>" . $outputPre;
-            if (strlen($contents) > $maxLength) {
-                $contents = substr($contents, 0, $maxLength - 40) . "<br><br>...<br>[Output truncated]</pre>";
-                $truncated = true;
-            }
         } else {
-            $outputClean = str_replace('`', '', $output);
+            $outputClean = str_replace('`', '', $snippet);
             $outputMd = self::escapeMarkdownV2($outputClean);
             $contents = "*🤖 Scheduled Job Output*\n\n";
             $contents .= "*Project:* " . self::escapeMarkdownV2(config('app.name') ?: 'Laravel App') . "\n";
@@ -58,10 +65,6 @@ class TelegramNotifier
             $contents .= "*Command:* `" . self::escapeMarkdownV2($commandName) . "`\n";
             $contents .= "*Time:* " . self::escapeMarkdownV2(now()->format('Y-m-d H:i:s T')) . "\n\n";
             $contents .= "*Output:*\n" . $outputMd;
-            if (strlen($contents) > $maxLength) {
-                $contents = substr($contents, 0, $maxLength - 40) . "\n\n...\n[Output truncated]";
-                $truncated = true;
-            }
         }
         return [$contents, $truncated];
     }
@@ -76,28 +79,18 @@ class TelegramNotifier
         $botToken = config('schedule-telegram-output.bots.default.token');
         [$contents, $truncated] = self::formatMessage($output, $commandName, $parseMode, $maxLength);
         $shouldDebug = config('schedule-telegram-output.debug', config('app.debug'));
-        // Log the raw message before sending
-        \Log::debug('[ScheduleTelegramOutput] Raw Telegram message', [
+        // Log the message immediately after escaping
+        \Log::debug('[ScheduleTelegramOutput] Escaped Telegram message', [
             'message' => $contents,
             'parse_mode' => $parseMode
         ]);
-        // Log the actual HTTP payload
-        \Log::debug('[ScheduleTelegramOutput] HTTP payload', [
-            'url' => "https://api.telegram.org/bot{$botToken}/sendMessage",
-            'params' => [
-                'chat_id' => $chatId,
-                'text' => $contents,
-                'parse_mode' => $parseMode,
-            ]
-        ]);
-        // Log the raw HTTP body as it will be sent
-        \Log::debug('[ScheduleTelegramOutput] HTTP raw body', [
-            'body' => http_build_query([
-                'chat_id' => $chatId,
-                'text' => $contents,
-                'parse_mode' => $parseMode,
-            ])
-        ]);
+        // Log the actual HTTP payload (as array, not http_build_query)
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $contents,
+            'parse_mode' => $parseMode,
+        ];
+        \Log::debug('[ScheduleTelegramOutput] HTTP JSON payload', $payload);
         if ($shouldDebug) {
             \Log::info('[ScheduleTelegramOutput] Telegram message content', [
                 'message' => $contents,
@@ -105,12 +98,7 @@ class TelegramNotifier
             ]);
         }
         $apiUrl = "https://api.telegram.org/bot{$botToken}/sendMessage";
-        $params = [
-            'chat_id' => $chatId,
-            'text' => $contents,
-            'parse_mode' => $parseMode,
-        ];
-        $response = Http::asForm()->post($apiUrl, $params);
+        $response = Http::withHeaders(['Content-Type' => 'application/json'])->post($apiUrl, $payload);
         if (!$response->successful()) {
             \Log::error('[ScheduleTelegramOutput] Failed to send Telegram message', [
                 'chat_id' => $chatId,

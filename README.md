@@ -84,9 +84,13 @@ return [
         'max_length' => 4000,
         'include_timestamp' => true,
         'include_command_name' => true,
+        // Max number of characters to send as output snippet (default: 500)
+        'snippet_max_length' => 500,
     ],
 ];
 ```
+
+- **snippet_max_length**: Maximum number of characters to send as the output snippet in Telegram messages. Default is 500. You can override this in your config file.
 
 ### .env Example
 
@@ -98,6 +102,15 @@ SCHEDULE_TELEGRAM_OUTPUT_PARSE_MODE=MarkdownV2 # or HTML
 ```
 
 ## Usage
+
+By default, only a snippet of the output (first 10 lines or up to 500 characters) is sent to Telegram. You can change the maximum snippet length in your config:
+
+```php
+// config/schedule-telegram-output.php
+'message_format' => [
+    'snippet_max_length' => 1000, // Send up to 1000 characters
+],
+```
 
 In your `App\Console\Kernel` or any scheduled command:
 

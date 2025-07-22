@@ -61,5 +61,7 @@ return [
         'include_command_name' => true,
         // Show the app URL in Telegram messages (default: false)
         'show_url' => false,
+        // Max number of characters to send as output snippet (default: 500)
+        'snippet_max_length' => 500,
     ],
 ]; 
