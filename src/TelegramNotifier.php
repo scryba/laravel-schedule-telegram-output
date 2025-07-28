@@ -80,6 +80,14 @@ class TelegramNotifier
         [$contents, $truncated] = self::formatMessage($output, $commandName, $parseMode, $maxLength);
         $shouldDebug = config('schedule-telegram-output.debug', config('app.debug'));
         $logPayload = config('schedule-telegram-output.log_payload', false);
+
+        // Prepare the payload for the HTTP request
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $contents,
+            'parse_mode' => $parseMode,
+        ];
+
         if ($logPayload) {
             // Log the message immediately after escaping
             \Log::debug('[ScheduleTelegramOutput] Escaped Telegram message', [
@@ -87,11 +95,6 @@ class TelegramNotifier
                 'parse_mode' => $parseMode
             ]);
             // Log the actual HTTP payload (as array, not http_build_query)
-            $payload = [
-                'chat_id' => $chatId,
-                'text' => $contents,
-                'parse_mode' => $parseMode,
-            ];
             \Log::debug('[ScheduleTelegramOutput] HTTP JSON payload', $payload);
         }
         if ($shouldDebug) {
